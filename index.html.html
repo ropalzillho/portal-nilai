@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DKHTKA - SDN 5 Melayu</title>
+  
+  <!-- Font-Awesome untuk Ikon Tajam -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  
+  <!-- Google Fonts - Plus Jakarta Sans untuk Tipografi Modern -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* -------------------------------------------------------------
+       CSS RESET & VARIABLES
+       ------------------------------------------------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: #f0f7ff;
+      color: #1e293b;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 80px; /* Ruang untuk Bottom Navbar */
+    }
+
+    /* -------------------------------------------------------------
+       MOBILE CONTAINER DESIGN (MAX-WIDTH: 440px)
+       ------------------------------------------------------------- */
+    .app-container {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      background: transparent;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    /* Header Sekolah */
+    .school-header {
+      text-align: center;
+      padding: 20px 16px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 24px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .school-logo {
+      width: 54px;
+      height: 54px;
+      background: #2563eb;
+      color: #ffffff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 8px 16px rgba(37, 99, 111, 0.15);
+    }
+
+    .school-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1e3a8a;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .school-subtitle {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* -------------------------------------------------------------
+       GLASSMORPHISM PANEL (MATERIAL 3)
+       ------------------------------------------------------------- */
+    .m3-glass {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* -------------------------------------------------------------
+       SUB-PAGES VIEW CONTROLLER
+       ------------------------------------------------------------- */
+    .page-view {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .page-view.active {
+      display: flex;
+    }
+
+    /* Section Title */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .section-title i {
+      color: #2563eb;
+    }
+
+    .section-desc {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    /* -------------------------------------------------------------
+       NILAIKU PAGE: SEARCH & SURPRISE CARDS
+       ------------------------------------------------------------- */
+    .search-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 16px;
+    }
+
+    .nisn-input {
+      width: 100%;
+      height: 56px;
+      border-radius: 16px;
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      padding: 0 16px 0 48px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .nisn-input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 111, 0.12);
+    }
+
+    .nisn-input::placeholder {
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    .btn-search {
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(37, 99, 111, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .btn-search:active {
+      transform: scale(0.98);
+      opacity: 0.95;
+    }
+
+    /* Loading Spinner */
+    .loading-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 10px;
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(37, 99, 111, 0.15);
+      border-top: 4px solid #2563eb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: #2563eb;
+      animation: pulse 1.2s infinite ease-in-out;
+      text-align: center;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+
+    /* -------------------------------------------------------------
+       KARTU INDIVIDU DENGAN EFEK KEJUTAN (SURPRISE BOUNCE EFFECT)
+       ------------------------------------------------------------- */
+    .result-container {
+      display: none;
+    }
+
+    .result-card {
+      border-radius: 24px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+      
+      /* Animasi Meloncat Memantul (Surprise Bounce) */
+      animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale3d(0.3, 0.3, 0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale3d(1.05, 1.05, 1.05);
+      }
+      70% {
+        transform: scale3d(0.9, 0.9, 0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+      }
+    }
+
+    /* Kategori Tema Kartu Hasil */
+    
+    /* Rank 1 (Juara 1) - Hijau Pastel Glow & Shimmer */
+    .card-rank-1 {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border: 2px solid #34d399;
+      box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+      position: relative;
+    }
+    
+    .card-rank-1::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -150%;
+      width: 50%; height: 100%;
+      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+      transform: skewX(-25deg);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -150%; }
+      50% { left: 150%; }
+      100% { left: 150%; }
+    }
+
+    /* Rank 2 (Juara 2) - Biru Pastel */
+    .card-rank-2 {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      border: 2px solid #38bdf8;
+    }
+
+    /* Rank 3 (Juara 3) - Oranye/Perunggu Pastel */
+    .card-rank-3 {
+      background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+      border: 2px solid #fb923c;
+    }
+
+    /* Rank 4+ - Standar Glassmorphism */
+    .card-rank-other {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 1);
+    }
+
+    /* Lencana Peringkat */
+    .badge-rank {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-rank-1 { background: #10b981; color: #ffffff; }
+    .badge-rank-2 { background: #0284c7; color: #ffffff; }
+    .badge-rank-3 { background: #d97706; color: #ffffff; }
+    .badge-rank-other { background: #64748b; color: #ffffff; }
+
+    /* Bio Siswa */
+    .student-id {
+      margin-top: 4px;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .student-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+      margin-top: 4px;
+      max-width: 75%;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(0, 0, 0, 0.08);
+      margin: 16px 0;
+    }
+
+    /* Layout Nilai Vertikal Anti-Tabrakan */
+    .scores-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .score-row-box {
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .score-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .subject-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    /* Tag Kategori Adaptif (Width: Auto) */
+    .score-category-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      width: auto;
+      display: inline-block;
+    }
+
+    .tag-baik-istimewa { background: #d1fae5; color: #065f46; }
+    .tag-baik { background: #e0f2fe; color: #075985; }
+    .tag-memadai { background: #fef3c7; color: #92400e; }
+    .tag-kurang { background: #fee2e2; color: #991b1b; }
+
+    .score-number {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    /* Rata-Rata Card Footer */
+    .average-box {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(37, 99, 111, 0.05);
+      border: 1px solid rgba(37, 99, 111, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .average-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .average-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: #2563eb;
+    }
+
+    /* -------------------------------------------------------------
+       HOME PAGE: STATISTIK REKAPITULASI KELAS (ANONIM)
+       ------------------------------------------------------------- */
+    .stats-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+
+    .stat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .stat-icon.mat { background: #eff6ff; color: #3b82f6; }
+    .stat-icon.bin { background: #ecfdf5; color: #10b981; }
+
+    .stat-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    /* Grafik Batang Kustom */
+    .chart-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .chart-subject-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 4px;
+    }
+
+    .custom-bar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .bar-label-name {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .dot-baik { background: #10b981; }
+    .dot-memadai { background: #f59e0b; }
+    .dot-kurang { background: #ef4444; }
+
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      width: 0%; /* Diatur via JS */
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .fill-baik { background: linear-gradient(90deg, #34d399, #10b981); }
+    .fill-memadai { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+    .fill-kurang { background: linear-gradient(90deg, #f87171, #ef4444); }
+
+    /* Metadata Footer */
+    .metadata-footer {
+      text-align: center;
+      font-size: 10px;
+      color: #94a3b8;
+      line-height: 1.4;
+      margin-top: 10px;
+      padding: 0 10px;
+    }
+
+    /* -------------------------------------------------------------
+       BOTTOM NAVIGATION BAR (HEIGHT: 64px, POSITION: FIXED)
+       ------------------------------------------------------------- */
+    .bottom-navbar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 440px;
+      height: 64px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.03);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #64748b;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 11px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item i {
+      font-size: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-item.active {
+      color: #2563eb;
+      font-weight: 700;
+    }
+
+    .nav-item.active i {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Header Sekolah -->
+    <div class="school-header">
+      <div class="school-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div class="school-title">SD NEGERI 5 MELAYU</div>
+      <div class="school-subtitle">KAB. BARITO UTARA • TKA 2026</div>
+    </div>
+
+    <!-- ==========================================
+         PAGE: NILAIKU (DEFAULT ACTIVE)
+         ========================================== -->
+    <div id="page-nilaiku" class="page-view active">
+      <div class="m3-glass">
+        <div class="section-title">
+          <i class="fa-solid fa-address-card"></i>
+          Pencarian Nilai Pribadi
+        </div>
+        <p class="section-desc">Masukkan 10 digit Nomor Induk Siswa Nasional (NISN) Anda untuk membuka hasil Tes Kemampuan Akademik (TKA).</p>
+        
+        <div class="search-box">
+          <div class="input-wrapper">
+            <i class="fa-solid fa-search"></i>
+            <input type="number" id="nisn-input" class="nisn-input" placeholder="Contoh: 0149409187" pattern="[0-9]*" inputmode="numeric">
+          </div>
+          <button id="btn-search" class="btn-search">
+            <i class="fa-solid fa-envelope-open"></i>
+            Buka Amplop Nilai
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading Spinner Container -->
+      <div id="loading-container" class="loading-container m3-glass">
+        <div class="spinner"></div>
+        <div class="loading-text">Menyiapkan amplop nilai ujian Anda...</div>
+      </div>
+
+      <!-- Hasil Individu Container -->
+      <div id="result-container" class="result-container">
+        <!-- Struktur Kartu akan di-render dinamis via JavaScript -->
+      </div>
+    </div>
+
+    <!-- ==========================================
+         PAGE: HOME (REKAPITULASI KELAS)
+         ========================================== -->
+    <div id="page-home" class="page-view">
+      <!-- Ringkasan Rata-rata Kelas -->
+      <div class="stats-summary">
+        <div class="stat-card m3-glass">
+          <div class="stat-icon mat">
+            <i class="fa-solid fa-calculator"></i>
+          </div>
+          <div class="stat-title">Rata-Rata Matematika</div>
+          <div id="avg-mat-class" class="stat-value">0.00</div>
+        </div>
+        <div class="stat-card m3-glass">
+          <div class="stat-icon bin">
+            <i class="fa-solid fa-book"></i>
+          </div>
+          <div class="stat-title">Rata-Rata B. Indo</div>
+          <div id="avg-bin-class" class="stat-value">0.00</div>
+        </div>
+      </div>
+
+      <!-- Grafik Distribusi Matematika -->
+      <div class="m3-glass">
+        <div class="chart-subject-label">
+          <i class="fa-solid fa-square-poll-vertical" style="color:#2563eb; margin-right:6px;"></i> 
+          Distribusi Matematika Kelas
+        </div>
+        <div class="chart-container">
+          <div class="custom-bar-group">
+            
+            <div class="bar-row">
+              <div class="bar-labels">
+                <span class="bar-label-name"><span class="dot-indicator dot-baik"></span>Baik / Istimewa</span>
+                <span id="chart-mat-baik">0% (0 siswa)</span>
+              </div>
+              <div class="bar-track">
+                <div id="fill-mat-baik" class="bar-fill fill-baik"></div>
+              </div>
+            </div>
+
+            <div class="bar-row">
+              <div class="bar-labels">
+                <span class="bar-label-name"><span class="dot-indicator dot-memadai"></span>Memadai</span>
+                <span id="chart-mat-memadai">0% (0 siswa)</span>
+              </div>
+              <div class="bar-track">
+                <div id="fill-mat-memadai" class="bar-fill fill-memadai"></div>
+              </div>
+            </div>
+
+            <div class="bar-row">
+              <div class="bar-labels">
+                <span class="bar-label-name"><span class="dot-indicator dot-kurang"></span>Kurang</span>
+                <span id="chart-mat-kurang">0% (0 siswa)</span>
+              </div>
+              <div class="bar-track">
+                <div id="fill-mat-kurang" class="bar-fill fill-kurang"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Grafik Distribusi Bahasa Indonesia -->
+      <div class="m3-glass">
+        <div class="chart-subject-label">
+          <i class="fa-solid fa-square-poll-vertical" style="color:#10b981; margin-right:6px;"></i> 
+          Distribusi Bahasa Indonesia Kelas
+        </div>
+        <div class="chart-container">
+          <div class="custom-bar-group">
+            
+            <div class="bar-row">
+              <div class="bar-labels">
+                <span class="bar-label-name"><span class="dot-indicator dot-baik"></span>Baik / Istimewa</span>
+                <span id="chart-bin-baik">0% (0 siswa)</span>
+              </div>
+              <div class="bar-track">
+                <div id="fill-bin-baik" class="bar-fill fill-baik"></div>
+              </div>
+            </div>
+
+            <div class="bar-row">
+              <div class="bar-labels">
+                <span class="bar-label-name"><span class="dot-indicator dot-memadai"></span>Memadai</span>
+                <span id="chart-bin-memadai">0% (0 siswa)</span>
+              </div>
+              <div class="bar-track">
+                <div id="fill-bin-memadai" class="bar-fill fill-memadai"></div>
+              </div>
+            </div>
+
+            <div class="bar-row">
+              <div class="bar-labels">
+                <span class="bar-label-name"><span class="dot-indicator dot-kurang"></span>Kurang</span>
+                <span id="chart-bin-kurang">0% (0 siswa)</span>
+              </div>
+              <div class="bar-track">
+                <div id="fill-bin-kurang" class="bar-fill fill-kurang"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metadata App Footer -->
+    <div class="metadata-footer">
+      Daftar Kolektif Hasil Tes Kemampuan Akademik (DKHTKA)<br>
+      Tahun Pelajaran 2025/2026 • Kementerian Pendidikan Dasar dan Menengah
+    </div>
+
+  </div>
+
+  <!-- -------------------------------------------------------------
+       BOTTOM NAVBAR (HEIGHT: 64px, FIXED)
+       ------------------------------------------------------------- -->
+  <nav class="bottom-navbar">
+    <div id="nav-home" class="nav-item">
+      <i class="fa-solid fa-chart-simple"></i>
+      <span>Home</span>
+    </div>
+    <div id="nav-nilaiku" class="nav-item active">
+      <i class="fa-solid fa-address-card"></i>
+      <span>Nilaiku</span>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       JAVASCRIPT LOGIC & RAW DATA EXTRACTION
+       ========================================== -->
+  <script>
+    // 1. DATA EXTRACTION DARI PDF (89 SISWA SEKELAS SECARA LENGKAP)
+    const rawSiswa = [
+      {no: 1, nisn: "0149409187", nama: "Adelio Tsabit Alvaro", lahir: "Barito Utara, 25 Juli 2014", mat: 83.33, matKet: "Baik", bin: 96.67, binKet: "Baik - Istimewa"},
+      {no: 2, nisn: "3139507955", nama: "SITI AISYAH", lahir: "BARITO UTARA, 15 Desember 2013", mat: 46.67, matKet: "Memadai", bin: 63.33, binKet: "Memadai"},
+      {no: 3, nisn: "3149266515", nama: "Fauzia Rafifa", lahir: "Barito Utara, 1 Mei 2014", mat: 53.33, matKet: "Memadai", bin: 43.33, binKet: "Kurang"},
+      {no: 4, nisn: "0142911938", nama: "Arkan Attaya Almair El Fayet", lahir: "Barito Utara, 27 Juni 2014", mat: 40.00, matKet: "Memadai", bin: 76.67, binKet: "Baik"},
+      {no: 5, nisn: "3131972492", nama: "Nabila Mezzaluna", lahir: "Barito Utara, 30 Oktober 2013", mat: 60.00, matKet: "Baik", bin: 80.00, binKet: "Baik"},
+      {no: 6, nisn: "0137305703", nama: "Kyrandrea Oktavia Ariqa", lahir: "Barito Utara, 25 Oktober 2013", mat: 70.00, matKet: "Baik", bin: 80.00, binKet: "Baik"},
+      {no: 7, nisn: "0134968302", nama: "Muhammad Zein Umar", lahir: "Barito Utara, 20 November 2013", mat: 86.67, matKet: "Baik", bin: 90.00, binKet: "Baik"},
+      {no: 8, nisn: "0143355525", nama: "Khansa Faida Annaila", lahir: "Sigli, 30 April 2014", mat: 53.33, matKet: "Memadai", bin: 80.00, binKet: "Baik"},
+      {no: 9, nisn: "0147158196", nama: "Muna Hazijah", lahir: "Hulu Sungai Utara, 10 Juli 2014", mat: 66.67, matKet: "Baik", bin: 100.00, binKet: "Baik - Istimewa"},
+      {no: 10, nisn: "0144879250", nama: "Dhafitha Nizza Susanto", lahir: "Banjarbaru, 20 Maret 2014", mat: 66.67, matKet: "Baik", bin: 86.67, binKet: "Baik"},
+      {no: 11, nisn: "0143326790", nama: "Fida Humaira Shaleha", lahir: "Banjarmasin, 17 Februari 2014", mat: 53.33, matKet: "Memadai", bin: 63.33, binKet: "Memadai"},
+      {no: 12, nisn: "0146993716", nama: "AL FARIDA FAJAIAH", lahir: "BARITO UTARA, 29 April 2014", mat: 60.00, matKet: "Baik", bin: 83.33, binKet: "Baik"},
+      {no: 13, nisn: "3133534535", nama: "Dzaky Almair", lahir: "Barito Utara, 26 Oktober 2013", mat: 46.67, matKet: "Memadai", bin: 73.33, binKet: "Memadai"},
+      {no: 14, nisn: "0139010993", nama: "Angga Lukmanul Haq", lahir: "Kotabaru, 19 November 2013", mat: 76.67, matKet: "Baik", bin: 66.67, binKet: "Memadai"},
+      {no: 15, nisn: "0144161371", nama: "AFDAL REYHANSYAH", lahir: "BARITO UTARA, 13 Mei 2014", mat: 53.33, matKet: "Memadai", bin: 50.00, binKet: "Memadai"},
+      {no: 16, nisn: "0132055858", nama: "Muhammad Azzam Rabbani", lahir: "Barito Utara, 19 November 2013", mat: 90.00, matKet: "Baik", bin: 80.00, binKet: "Baik"},
+      {no: 17, nisn: "3148718356", nama: "ANDIRA SAFITRI", lahir: "BARITO UTARA, 30 Juli 2014", mat: 63.33, matKet: "Baik", bin: 73.33, binKet: "Memadai"},
+      {no: 18, nisn: "0143923330", nama: "AISYA MAULI CHAHYADI", lahir: "Palangka Raya, 17 April 2014", mat: 36.67, matKet: "Memadai", bin: 76.67, binKet: "Baik"},
+      {no: 19, nisn: "0142354853", nama: "Livia Kirana Puteri Pravangasta", lahir: "Barito Utara, 27 Agustus 2014", mat: 26.67, matKet: "Kurang", bin: 56.67, binKet: "Memadai"},
+      {no: 20, nisn: "3142433954", nama: "TASYA SALSABILA TAJRII", lahir: "SURABAYA, 8 Mei 2014", mat: 40.00, matKet: "Memadai", bin: 76.67, binKet: "Baik"},
+      {no: 21, nisn: "3145543190", nama: "Ghina Nurul Qayyum", lahir: "Barito Utara, 31 Mei 2014", mat: 56.67, matKet: "Baik", bin: 83.33, binKet: "Baik"},
+      {no: 22, nisn: "0131880218", nama: "Afeefa Farzana Alwa", lahir: "Barito Utara, 12 Desember 2013", mat: 53.33, matKet: "Memadai", bin: 86.67, binKet: "Baik"},
+      {no: 23, nisn: "3148907981", nama: "Muhammad Irja Anugrah", lahir: "Barito Utara, 15 Mei 2014", mat: 30.00, matKet: "Kurang", bin: 60.00, binKet: "Memadai"},
+      {no: 24, nisn: "0141344110", nama: "Hawa Jasmin Farras", lahir: "Barito Utara, 20 Juni 2014", mat: 80.00, matKet: "Baik", bin: 90.00, binKet: "Baik"},
+      {no: 25, nisn: "3140032058", nama: "Akbar Domi Putra", lahir: "Barito Utara, 30 Januari 2014", mat: 23.33, matKet: "Kurang", bin: 56.67, binKet: "Memadai"},
+      {no: 26, nisn: "3146569586", nama: "KAYLA ALMIRA FISYA", lahir: "BANJARBARU, 21 Januari 2014", mat: 70.00, matKet: "Baik", bin: 83.33, binKet: "Baik"},
+      {no: 27, nisn: "0135927784", nama: "Muhammad Aldo", lahir: "Barito Utara, 19 Oktober 2013", mat: 53.33, matKet: "Memadai", bin: 86.67, binKet: "Baik"},
+      {no: 28, nisn: "0144155709", nama: "Nadilla Azahra", lahir: "Barito Utara, 21 April 2014", mat: 30.00, matKet: "Kurang", bin: 43.33, binKet: "Kurang"},
+      {no: 29, nisn: "0144358794", nama: "Rafka Aditya Saputra", lahir: "Nganjuk, 25 April 2014", mat: 53.33, matKet: "Memadai", bin: 80.00, binKet: "Baik"},
+      {no: 30, nisn: "0135008077", nama: "Nureliza Paika Sari", lahir: "Muara Teweh, 27 Oktober 2013", mat: 43.33, matKet: "Memadai", bin: 80.00, binKet: "Baik"},
+      {no: 31, nisn: "0144279641", nama: "GWIN NINDIA RASYID", lahir: "BARITO UTARA, 10 Maret 2014", mat: 43.33, matKet: "Memadai", bin: 66.67, binKet: "Memadai"},
+      {no: 32, nisn: "3146982695", nama: "NAUFAL DARY ABIYYU", lahir: "Puruk Cahu, 7 Januari 2014", mat: 56.67, matKet: "Baik", bin: 66.67, binKet: "Memadai"},
+      {no: 33, nisn: "0149419767", nama: "Rafa Azka Putra", lahir: "Palangka Raya, 19 Juni 2014", mat: 50.00, matKet: "Memadai", bin: 90.00, binKet: "Baik"},
+      {no: 34, nisn: "0146214165", nama: "Azam Arganta", lahir: "Palangka Raya, 27 Juli 2014", mat: 43.33, matKet: "Memadai", bin: 70.00, binKet: "Memadai"},
+      {no: 35, nisn: "0145748914", nama: "Dhafitha Nizza Nur Azizah", lahir: "Barito Utara, 5 Maret 2014", mat: 33.33, matKet: "Memadai", bin: 80.00, binKet: "Baik"},
+      {no: 36, nisn: "0141995872", nama: "Fadil Saidi Shaid", lahir: "Barito Utara, 27 Januari 2014", mat: 33.33, matKet: "Memadai", bin: 33.33, binKet: "Kurang"},
+      {no: 37, nisn: "3134928629", nama: "Muhammad Novan Triadie", lahir: "Barito Utara, 6 November 2013", mat: 46.67, matKet: "Memadai", bin: 50.00, binKet: "Memadai"},
+      {no: 38, nisn: "0131642900", nama: "ARBIATUL ADAWIAH", lahir: "BARITO UTARA, 6 Desember 2013", mat: 56.67, matKet: "Baik", bin: 86.67, binKet: "Baik"},
+      {no: 39, nisn: "0127409232", nama: "ALDHEN ZAKARIA BUNGSU", lahir: "BARITO UTARA, 24 November 2012", mat: 20.00, matKet: "Kurang", bin: 13.33, binKet: "Kurang"},
+      {no: 40, nisn: "0149574226", nama: "Annabella Birgitha", lahir: "Barito Utara, 26 Juli 2014", mat: 66.67, matKet: "Baik", bin: 93.33, binKet: "Baik"},
+      {no: 41, nisn: "0132096104", nama: "CHERRY IVANA ANYOISTY HOSANG", lahir: "BARITO UTARA, 3 Desember 2013", mat: 63.33, matKet: "Baik", bin: 70.00, binKet: "Memadai"},
+      {no: 42, nisn: "0133836172", nama: "Axcel Junior", lahir: "Barito Utara, 19 September 2013", mat: 26.67, matKet: "Kurang", bin: 63.33, binKet: "Memadai"},
+      {no: 43, nisn: "3135736685", nama: "Muhammad Reyhan Fadhilah", lahir: "Barito Utara, 10 September 2013", mat: 46.67, matKet: "Memadai", bin: 63.33, binKet: "Memadai"},
+      {no: 44, nisn: "3142828134", nama: "Nazwa Malika Wijaya Ginting", lahir: "Barito Utara, 26 Juli 2014", mat: 46.67, matKet: "Memadai", bin: 93.33, binKet: "Baik"},
+      {no: 45, nisn: "0144665311", nama: "Siti Asha Rahmayanti", lahir: "Barito Utara, 21 Mei 2014", mat: 43.33, matKet: "Memadai", bin: 60.00, binKet: "Memadai"},
+      {no: 46, nisn: "3141586161", nama: "Muhammad Rayhan Dyandra", lahir: "Barito Utara, 9 Februari 2014", mat: 30.00, matKet: "Kurang", bin: 83.33, binKet: "Baik"},
+      {no: 47, nisn: "0131822743", nama: "Muhammad Tirta", lahir: "Banjarmasin, 12 Oktober 2013", mat: 96.67, matKet: "Baik - Istimewa", bin: 66.67, binKet: "Memadai"},
+      {no: 48, nisn: "0145190790", nama: "Aidan Alfathi Dyra Ghossan", lahir: "Barito Utara, 14 Juli 2014", mat: 53.33, matKet: "Memadai", bin: 80.00, binKet: "Baik"},
+      {no: 49, nisn: "0141693739", nama: "Victoria Glory Kirana", lahir: "Barito Utara, 18 Januari 2014", mat: 40.00, matKet: "Memadai", bin: 80.00, binKet: "Baik"},
+      {no: 50, nisn: "0142807833", nama: "Felicia Jessie Oktavia", lahir: "Palangka Raya, 12 Oktober 2014", mat: 50.00, matKet: "Memadai", bin: 96.67, binKet: "Baik - Istimewa"},
+      {no: 51, nisn: "0149420465", nama: "KEISHA JEHOVA SALLOM SINATRA", lahir: "BARITO UTARA, 2 Februari 2014", mat: 46.67, matKet: "Memadai", bin: 73.33, binKet: "Memadai"},
+      {no: 52, nisn: "0146730594", nama: "Viona Meilani", lahir: "Barito Utara, 28 Mei 2014", mat: 80.00, matKet: "Baik", bin: 83.33, binKet: "Baik"},
+      {no: 53, nisn: "0137996531", nama: "Yafet Natalno Mebas", lahir: "Barito Utara, 30 Desember 2013", mat: 6.67, matKet: "Kurang", bin: 76.67, binKet: "Baik"},
+      {no: 54, nisn: "3143877687", nama: "Paulus Dimas Fedrosa", lahir: "Barito Utara, 22 Februari 2014", mat: 60.00, matKet: "Baik", bin: 70.00, binKet: "Memadai"},
+      {no: 55, nisn: "0146880424", nama: "Siloam Wijaya Putra Cornelius", lahir: "Makassar, 3 Maret 2014", mat: 46.67, matKet: "Memadai", bin: 73.33, binKet: "Memadai"},
+      {no: 56, nisn: "0144542216", nama: "Luiz Fharel Simbolon", lahir: "Barito Utara, 18 Maret 2014", mat: 66.67, matKet: "Baik", bin: 90.00, binKet: "Baik"},
+      {no: 57, nisn: "3135132404", nama: "Keisya Gebi Putri Prisilia", lahir: "Sragen, 19 Mei 2013", mat: 50.00, matKet: "Memadai", bin: 73.33, binKet: "Memadai"},
+      {no: 58, nisn: "3147821688", nama: "Anggieta Berylia", lahir: "Barito Utara, 23 Maret 2014", mat: 53.33, matKet: "Memadai", bin: 100.00, binKet: "Baik - Istimewa"},
+      {no: 59, nisn: "0147771290", nama: "Daniella Putri Diandra", lahir: "Banjarbaru, 14 April 2014", mat: 80.00, matKet: "Baik", bin: 90.00, binKet: "Baik"},
+      {no: 60, nisn: "0144054209", nama: "Nafeeza Aundy Pramesthi Prayogo", lahir: "Barabai, 20 Maret 2014", mat: 33.33, matKet: "Memadai", bin: 60.00, binKet: "Memadai"},
+      {no: 61, nisn: "0143895658", nama: "Muhammad Nooruji Arbain", lahir: "Banjar, 14 Mei 2014", mat: 36.67, matKet: "Memadai", bin: 86.67, binKet: "Baik"},
+      {no: 62, nisn: "0138600497", nama: "HAIFA ZARQA AN-NISA", lahir: "SURABAYA, 11 Oktober 2013", mat: 26.67, matKet: "Kurang", bin: 73.33, binKet: "Memadai"},
+      {no: 63, nisn: "0134363273", nama: "NOOR ATIQAH ALNAZHIFA", lahir: "BANJARMASIN, 19 November 2013", mat: 46.67, matKet: "Memadai", bin: 86.67, binKet: "Baik"},
+      {no: 64, nisn: "0132143345", nama: "Muhammad Fahmi Rizqi", lahir: "Barito Utara, 22 Desember 2013", mat: 50.00, matKet: "Memadai", bin: 73.33, binKet: "Memadai"},
+      {no: 65, nisn: "0145209482", nama: "Rensa Surya Perkasa", lahir: "Barito Utara, 10 Februari 2014", mat: 53.33, matKet: "Memadai", bin: 56.67, binKet: "Memadai"},
+      {no: 66, nisn: "0147138363", nama: "Adelia Jasmine Azzahra", lahir: "Sleman, 27 Februari 2014", mat: 56.67, matKet: "Baik", bin: 86.67, binKet: "Baik"},
+      {no: 67, nisn: "3144772313", nama: "Farrin Zellda Fauzi", lahir: "Barito Utara, 4 Februari 2014", mat: 33.33, matKet: "Memadai", bin: 63.33, binKet: "Memadai"},
+      {no: 68, nisn: "0147471692", nama: "Bilfagih Rey Alteza", lahir: "Barito Utara, 4 Maret 2014", mat: 43.33, matKet: "Memadai", bin: 73.33, binKet: "Memadai"},
+      {no: 69, nisn: "0144776346", nama: "Mirza Azizan", lahir: "Banjarmasin, 11 Juni 2014", mat: 33.33, matKet: "Memadai", bin: 23.33, binKet: "Kurang"},
+      {no: 70, nisn: "0146861470", nama: "Mecca Shafiya Az Zahra", lahir: "Kandangan, 24 Januari 2014", mat: 56.67, matKet: "Baik", bin: 83.33, binKet: "Baik"},
+      {no: 71, nisn: "0135778870", nama: "ALRIDHO DENIANDRA LESMANA", lahir: "BANJARMASIN, 26 November 2013", mat: 50.00, matKet: "Memadai", bin: 90.00, binKet: "Baik"},
+      {no: 72, nisn: "0137896505", nama: "Muhammad Fajar Ilham", lahir: "Barito Utara, 22 November 2013", mat: 20.00, matKet: "Kurang", bin: 90.00, binKet: "Baik"},
+      {no: 73, nisn: "0137707564", nama: "Salsabila Putri Al Ariani", lahir: "Banjarmasin, 9 November 2013", mat: 33.33, matKet: "Memadai", bin: 60.00, binKet: "Memadai"},
+      {no: 74, nisn: "3131152115", nama: "Muhamad Adhyatsha Pratama", lahir: "Barito Utara, 4 September 2013", mat: 60.00, matKet: "Baik", bin: 76.67, binKet: "Baik"},
+      {no: 75, nisn: "0147361793", nama: "Azkiya Khumaira", lahir: "Barito Utara, 5 Februari 2014", mat: 53.33, matKet: "Memadai", bin: 76.67, binKet: "Baik"},
+      {no: 76, nisn: "0145579802", nama: "Kesia Tianka Nainggolan", lahir: "Barito Utara, 21 April 2014", mat: 26.67, matKet: "Kurang", bin: 76.67, binKet: "Baik"},
+      {no: 77, nisn: "0136108320", nama: "Aaron Al Akhyar", lahir: "Barito Utara, 15 November 2013", mat: 43.33, matKet: "Memadai", bin: 86.67, binKet: "Baik"},
+      {no: 78, nisn: "3142729784", nama: "TEUKU FAITH SYUJA RISYANDA", lahir: "MEDAN, 22 Mei 2014", mat: 46.67, matKet: "Memadai", bin: 56.67, binKet: "Memadai"},
+      {no: 79, nisn: "0141164751", nama: "Kellen Lim", lahir: "Banjarmasin, 2 April 2014", mat: 36.67, matKet: "Memadai", bin: 53.33, binKet: "Memadai"},
+      {no: 80, nisn: "0139567041", nama: "MUHAMMAD ARUNA AL-ZIDNI", lahir: "TAMIANG LAYANG, 3 September 2013", mat: 33.33, matKet: "Memadai", bin: 36.67, binKet: "Kurang"},
+      {no: 81, nisn: "0134294383", nama: "Kholita Anatasya", lahir: "Barito Utara, 23 Agustus 2013", mat: 46.67, matKet: "Memadai", bin: 63.33, binKet: "Memadai"},
+      {no: 82, nisn: "0148347969", nama: "Hana Wiji Astuti", lahir: "Barito Utara, 13 Oktober 2014", mat: 50.00, matKet: "Memadai", bin: 86.67, binKet: "Baik"},
+      {no: 83, nisn: "3141894654", nama: "Vahrizzan Akhmad Arrava Endris", lahir: "Barito Utara, 24 Maret 2014", mat: 43.33, matKet: "Memadai", bin: 66.67, binKet: "Memadai"},
+      {no: 84, nisn: "3147579464", nama: "Afif Firdaus", lahir: "Barito Utara, 9 Juni 2014", mat: 56.67, matKet: "Baik", bin: 76.67, binKet: "Baik"},
+      {no: 85, nisn: "0147401742", nama: "MUHAMMAD IZDIHAR WIDODO", lahir: "Barito Utara, 5 Februari 2014", mat: 53.33, matKet: "Memadai", bin: 96.67, binKet: "Baik - Istimewa"},
+      {no: 86, nisn: "0131085930", nama: "Syabil Nanda Bayu Ismail", lahir: "Barito Utara, 19 November 2013", mat: 50.00, matKet: "Memadai", bin: 46.67, binKet: "Kurang"},
+      {no: 87, nisn: "3149410700", nama: "Raissha Almira Wibowo", lahir: "Balikpapan, 14 Februari 2014", mat: 23.33, matKet: "Kurang", bin: 30.00, binKet: "Kurang"},
+      {no: 88, nisn: "3134560361", nama: "Evita Farida Khaerunnisa", lahir: "Barito Utara, 27 September 2013", mat: 30.00, matKet: "Kurang", bin: 63.33, binKet: "Memadai"},
+      {no: 89, nisn: "0149605356", nama: "Muhammad Zacky", lahir: "Barito Utara, 20 Maret 2014", mat: 46.67, matKet: "Memadai", bin: 76.67, binKet: "Baik"}
+    ];
+
+    // 2. LOGIKA PERHITUNGAN RATA-RATA & PERINGKAT KELAS SECARA OTOMATIS
+    const processedSiswa = rawSiswa.map(item => {
+      const avg = parseFloat(((item.mat + item.bin) / 2).toFixed(2));
+      return { ...item, avg: avg };
+    });
+
+    // Urutkan siswa dari nilai rata-rata kombinasi tertinggi ke terendah
+    processedSiswa.sort((a, b) => b.avg - a.avg);
+
+    // Tetapkan urutan peringkat (rank) setelah disortir
+    const sortedSiswa = processedSiswa.map((item, idx) => {
+      return { ...item, rank: idx + 1 };
+    });
+
+    // 3. STATISTIK GLOBAL UNTUK HALAMAN REKAPITULASI (HOME)
+    const jumlahSiswa = sortedSiswa.length;
+    
+    // Rata-rata Nilai Kelas
+    const totalMat = sortedSiswa.reduce((acc, curr) => acc + curr.mat, 0);
+    const totalBin = sortedSiswa.reduce((acc, curr) => acc + curr.bin, 0);
+    const avgMatClass = (totalMat / jumlahSiswa).toFixed(2);
+    const avgBinClass = (totalBin / jumlahSiswa).toFixed(2);
+
+    // Hitung Distribusi Kategori Matematika
+    let matBaikCount = 0;
+    let matMemadaiCount = 0;
+    let matKurangCount = 0;
+
+    // Hitung Distribusi Kategori Bahasa Indonesia
+    let binBaikCount = 0;
+    let binMemadaiCount = 0;
+    let binKurangCount = 0;
+
+    sortedSiswa.forEach(siswa => {
+      // Distribusi Matematika
+      if (siswa.matKet === "Baik" || siswa.matKet === "Baik - Istimewa" || siswa.matKet === "Baik Istimewa") {
+        matBaikCount++;
+      } else if (siswa.matKet === "Memadai") {
+        matMemadaiCount++;
+      } else {
+        matKurangCount++;
+      }
+
+      // Distribusi Bahasa Indonesia
+      if (siswa.binKet === "Baik" || siswa.binKet === "Baik - Istimewa" || siswa.binKet === "Baik Istimewa") {
+        binBaikCount++;
+      } else if (siswa.binKet === "Memadai") {
+        binMemadaiCount++;
+      } else {
+        binKurangCount++;
+      }
+    });
+
+    // Persentase Distribusi
+    const pctMatBaik = ((matBaikCount / jumlahSiswa) * 100).toFixed(0);
+    const pctMatMemadai = ((matMemadaiCount / jumlahSiswa) * 100).toFixed(0);
+    const pctMatKurang = ((matKurangCount / jumlahSiswa) * 100).toFixed(0);
+
+    const pctBinBaik = ((binBaikCount / jumlahSiswa) * 100).toFixed(0);
+    const pctBinMemadai = ((binMemadaiCount / jumlahSiswa) * 100).toFixed(0);
+    const pctBinKurang = ((binKurangCount / jumlahSiswa) * 100).toFixed(0);
+
+    // Tampilkan Data Rekapitulasi ke Elemen UI
+    document.getElementById("avg-mat-class").innerText = avgMatClass;
+    document.getElementById("avg-bin-class").innerText = avgBinClass;
+
+    // Tulis label teks distribusi
+    document.getElementById("chart-mat-baik").innerText = `${pctMatBaik}% (${matBaikCount} siswa)`;
+    document.getElementById("chart-mat-memadai").innerText = `${pctMatMemadai}% (${matMemadaiCount} siswa)`;
+    document.getElementById("chart-mat-kurang").innerText = `${pctMatKurang}% (${matKurangCount} siswa)`;
+
+    document.getElementById("chart-bin-baik").innerText = `${pctBinBaik}% (${binBaikCount} siswa)`;
+    document.getElementById("chart-bin-memadai").innerText = `${pctBinMemadai}% (${binMemadaiCount} siswa)`;
+    document.getElementById("chart-bin-kurang").innerText = `${pctBinKurang}% (${binKurangCount} siswa)`;
+
+    // Pemicu Pengisian Bar Grafik (Dijalankan saat halaman dimuat)
+    setTimeout(() => {
+      document.getElementById("fill-mat-baik").style.width = `${pctMatBaik}%`;
+      document.getElementById("fill-mat-memadai").style.width = `${pctMatMemadai}%`;
+      document.getElementById("fill-mat-kurang").style.width = `${pctMatKurang}%`;
+
+      document.getElementById("fill-bin-baik").style.width = `${pctBinBaik}%`;
+      document.getElementById("fill-bin-memadai").style.width = `${pctBinMemadai}%`;
+      document.getElementById("fill-bin-kurang").style.width = `${pctBinKurang}%`;
+    }, 200);
+
+    // 4. LOGIKA NAVIGASI MENU (TAB SWITCHER)
+    const navHome = document.getElementById("nav-home");
+    const navNilaiku = document.getElementById("nav-nilaiku");
+    const pageHome = document.getElementById("page-home");
+    const pageNilaiku = document.getElementById("page-nilaiku");
+
+    navHome.addEventListener("click", () => {
+      navHome.classList.add("active");
+      navNilaiku.classList.remove("active");
+      pageHome.classList.add("active");
+      pageNilaiku.classList.remove("active");
+    });
+
+    navNilaiku.addEventListener("click", () => {
+      navNilaiku.classList.add("active");
+      navHome.classList.remove("active");
+      pageNilaiku.classList.add("active");
+      pageHome.classList.remove("active");
+    });
+
+    // 5. SISTEM PENCARIAN & ANIMASI LOADING AMPLOP NILAI (NILAIKU)
+    const btnSearch = document.getElementById("btn-search");
+    const nisnInput = document.getElementById("nisn-input");
+    const loadingContainer = document.getElementById("loading-container");
+    const resultContainer = document.getElementById("result-container");
+
+    btnSearch.addEventListener("click", performSearch);
+    nisnInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        performSearch();
+      }
+    });
+
+    function performSearch() {
+      const inputVal = nisnInput.value.trim();
+      
+      // Sembunyikan hasil lama terlebih dahulu
+      resultContainer.style.display = "none";
+      resultContainer.innerHTML = "";
+
+      if (inputVal === "") {
+        showNoInputMessage();
+        return;
+      }
+
+      // Tampilkan animasi Loading Dramatis
+      loadingContainer.style.display = "flex";
+
+      setTimeout(() => {
+        // Matikan animasi loading
+        loadingContainer.style.display = "none";
+
+        // Lakukan pencarian data dengan kecocokan real-time
+        const matchStudent = sortedSiswa.find(siswa => siswa.nisn === inputVal);
+
+        if (matchStudent) {
+          renderStudentCard(matchStudent);
+        } else {
+          showNotFoundCard(inputVal);
+        }
+      }, 1200); // Durasi Loading Membangun Ketegangan (1,2 detik)
+    }
+
+    // Tampilkan peringatan jika input NISN kosong
+    function showNoInputMessage() {
+      resultContainer.innerHTML = `
+        <div class="m3-glass" style="border: 1px solid #ef4444; background: rgba(254, 242, 242, 0.9);">
+          <div style="display:flex; align-items:center; gap:12px; color:#b91c1c; font-weight:700; font-size:14px;">
+            <i class="fa-solid fa-circle-exclamation" style="font-size:18px;"></i>
+            Masukkan Nomor NISN
+          </div>
+          <p style="font-size:13px; color:#7f1d1d; margin-top:8px; line-height:1.4;">
+            Mohon isi kolom pencarian dengan 10 digit Nomor Induk Siswa Nasional (NISN) Anda terlebih dahulu sebelum membuka amplop nilai.
+          </p>
+        </div>
+      `;
+      resultContainer.style.display = "block";
+    }
+
+    // Tampilkan kartu jika NISN tidak ditemukan
+    function showNotFoundCard(nisn) {
+      resultContainer.innerHTML = `
+        <div class="m3-glass" style="border: 1px solid #f97316; background: rgba(255, 247, 237, 0.9);">
+          <div style="display:flex; align-items:center; gap:12px; color:#c2410c; font-weight:700; font-size:14px;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size:18px;"></i>
+            NISN Tidak Terdaftar
+          </div>
+          <p style="font-size:13px; color:#9a3412; margin-top:8px; line-height:1.4;">
+            NISN <strong style="font-family: monospace;">"${nisn}"</strong> tidak terdaftar dalam pangkalan data TKA SDN 5 Melayu tahun 2026. Mohon pastikan kembali digit yang Anda ketikkan sudah sesuai dengan yang tercetak di kartu peserta Anda.
+          </p>
+        </div>
+      `;
+      resultContainer.style.display = "block";
+    }
+
+    // Render Kartu Hasil Siswa Dinamis
+    function renderStudentCard(siswa) {
+      // Menentukan Tema & Lencana berdasarkan Rank (Juara Kelas)
+      let cardClass = "";
+      let badgeHtml = "";
+
+      if (siswa.rank === 1) {
+        cardClass = "card-rank-1";
+        badgeHtml = `<span class="badge-rank badge-rank-1"><i class="fa-solid fa-trophy"></i> Juara 1</span>`;
+      } else if (siswa.rank === 2) {
+        cardClass = "card-rank-2";
+        badgeHtml = `<span class="badge-rank badge-rank-2"><i class="fa-solid fa-medal"></i> Juara 2</span>`;
+      } else if (siswa.rank === 3) {
+        cardClass = "card-rank-3";
+        badgeHtml = `<span class="badge-rank badge-rank-3"><i class="fa-solid fa-award"></i> Juara 3</span>`;
+      } else {
+        cardClass = "card-rank-other";
+        badgeHtml = `<span class="badge-rank badge-rank-other">Peringkat #${siswa.rank}</span>`;
+      }
+
+      // Deteksi Kategori Tag Mata Pelajaran untuk Matematika
+      let matTagClass = "";
+      if (siswa.matKet.includes("Istimewa") || siswa.matKet.includes("Baik - Istimewa")) matTagClass = "tag-baik-istimewa";
+      else if (siswa.matKet.includes("Baik")) matTagClass = "tag-baik";
+      else if (siswa.matKet.includes("Memadai")) matTagClass = "tag-memadai";
+      else matTagClass = "tag-kurang";
+
+      // Deteksi Kategori Tag Mata Pelajaran untuk Bahasa Indonesia
+      let binTagClass = "";
+      if (siswa.binKet.includes("Istimewa") || siswa.binKet.includes("Baik - Istimewa")) binTagClass = "tag-baik-istimewa";
+      else if (siswa.binKet.includes("Baik")) binTagClass = "tag-baik";
+      else if (siswa.binKet.includes("Memadai")) binTagClass = "tag-memadai";
+      else binTagClass = "tag-kurang";
+
+      const htmlContent = `
+        <div class="result-card ${cardClass}">
+          ${badgeHtml}
+          
+          <div class="student-id">NISN • ${siswa.nisn}</div>
+          <div class="student-name">${siswa.nama}</div>
+          <div style="font-size: 11px; color: #475569; font-weight: 500; margin-top: 4px;">
+            <i class="fa-solid fa-cake-candles" style="margin-right: 4px;"></i> ${siswa.lahir}
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- List Nilai Siswa (Kelurusan Baris Nilai Vertikal Anti-Tabrakan) -->
+          <div class="scores-list">
+            
+            <!-- Matematika Row Box -->
+            <div class="score-row-box">
+              <div class="score-info">
+                <span class="subject-name">Matematika</span>
+                <span class="score-category-tag ${matTagClass}">${siswa.matKet}</span>
+              </div>
+              <div class="score-number">${siswa.mat.toFixed(2)}</div>
+            </div>
+
+            <!-- Bahasa Indonesia Row Box -->
+            <div class="score-row-box">
+              <div class="score-info">
+                <span class="subject-name">Bahasa Indonesia</span>
+                <span class="score-category-tag ${binTagClass}">${siswa.binKet}</span>
+              </div>
+              <div class="score-number">${siswa.bin.toFixed(2)}</div>
+            </div>
+
+          </div>
+
+          <!-- Rata-rata Ujian Kombinasi -->
+          <div class="average-box">
+            <span class="average-label">Rata-Rata Kombinasi</span>
+            <span class="average-value">${siswa.avg.toFixed(2)}</span>
+          </div>
+
+        </div>
+      `;
+
+      resultContainer.innerHTML = htmlContent;
+      resultContainer.style.display = "block";
+    }
+  </script>
+</body>
+</html>
